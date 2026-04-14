@@ -1,0 +1,72 @@
+spring:
+  application:
+    name: wtcmessenger
+
+server:
+  port: 8082
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/wtc_messenger}
+      database: ${MONGODB_DATABASE:wtc_messenger}
+      auto-index-creation: true
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 1
+        linger.ms: 5
+        batch.size: 16384
+
+    consumer:
+      group-id: wtc-messaging-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      properties:
+        spring.json.trusted.packages: "com.wtc.messaging.dto"
+        max.poll.records: 50
+        session.timeout.ms: 30000
+
+    listener:
+      ack-mode: manual_immediate
+      concurrency: 3
+
+kafka:
+  topics:
+    message-send: wtc.message.send
+    message-status: wtc.message.status
+    campaign-schedule: wtc.campaign.schedule
+    campaign-dispatch: wtc.campaign.dispatch
+    push-notification: wtc.push.notification
+    dead-letter: wtc.dead.letter
+
+firebase:
+  credentials-path: ${FIREBASE_CREDENTIALS_PATH:classpath:firebase-service-account.json}
+  project-id: ${FIREBASE_PROJECT_ID:wtc-messenger-firebase}
+
+jwt:
+  secret: ${JWT_SECRET:wtc-secret-key-change-in-production}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    com.wtc.messaging: DEBUG
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
