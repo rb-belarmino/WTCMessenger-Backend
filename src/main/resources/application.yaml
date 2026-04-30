@@ -2,12 +2,9 @@ spring:
   application:
     name: wtcmessenger
 
-server:
-  port: 8082
-
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/wtc_messenger}
+      uri: ${MONGODB_URI:mongodb://root:secret@localhost:27017/wtc_messenger?authSource=admin}
       database: ${MONGODB_DATABASE:wtc_messenger}
       auto-index-creation: true
 
@@ -32,13 +29,16 @@ server:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       enable-auto-commit: false
       properties:
-        spring.json.trusted.packages: "com.wtc.messaging.dto"
+        spring.json.trusted.packages: "com.wtc.messaging.dto,com.wtcmessenger.dto"
         max.poll.records: 50
         session.timeout.ms: 30000
 
     listener:
       ack-mode: manual_immediate
       concurrency: 3
+
+server:
+  port: 8082
 
 kafka:
   topics:

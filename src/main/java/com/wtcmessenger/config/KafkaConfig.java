@@ -95,7 +95,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 50);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.wtc.messaging.dto");
+        config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.wtc.messaging.dto,com.wtcmessenger.dto");
         config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
         config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Object.class.getName());
         return new DefaultKafkaConsumerFactory<>(config);

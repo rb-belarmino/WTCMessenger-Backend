@@ -36,7 +36,7 @@ public class FirebaseService {
                         .build())
                 .build();
 
-        Message firebaseMessage = Message.builder()
+        com.google.firebase.messaging.Message firebaseMessage = com.google.firebase.messaging.Message.builder()
                 .setToken(event.getFcmToken())
                 .setNotification(notification)
                 .setApnsConfig(apnsConfig)
@@ -59,7 +59,7 @@ public class FirebaseService {
             data.put("messageId", messageId);
             data.put("status", status.name());
 
-            Message silentMessage = Message.builder()
+            com.google.firebase.messaging.Message silentMessage = com.google.firebase.messaging.Message.builder()
                     .setToken(fcmToken)
                     .putAllData(data)
                     .setApnsConfig(ApnsConfig.builder()
@@ -67,9 +67,9 @@ public class FirebaseService {
                             .build())
                     .build();
 
-            FirebaseMessenger.getInstance().send(silentMessage);
+            FirebaseMessaging.getInstance().send(silentMessage);
 
-        } catch (FirebaseMessengerException e) {
+        } catch (FirebaseMessagingException e) {
             log.warn("Falha no status update silencioso para messageId={}: {}", messageId, e.getMessage());
         }
     }

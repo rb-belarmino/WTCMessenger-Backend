@@ -51,7 +51,7 @@ public class MessageWorker {
             log.info("Mensagem entregue via FCM: messageId={}, fcmMessageId={}",
                     event.getMessageId(), fcmMessageId);
 
-        } catch (FirebaseMessengerException ex) {
+        } catch (FirebaseMessagingException ex) {
             log.error("Falha FCM para messageId={}: {}", event.getMessageId(), ex.getMessage());
             throw new RuntimeException("Firebase delivery failed: " + ex.getMessage(), ex);
 
