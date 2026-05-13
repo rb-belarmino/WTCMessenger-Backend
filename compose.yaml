@@ -3,9 +3,9 @@ services:
     image: 'mongo:latest'
     container_name: wtcmessenger-mongo
     environment:
-      - 'MONGO_INITDB_DATABASE=mydatabase'
-      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
-      - 'MONGO_INITDB_ROOT_USERNAME=root'
+      - 'MONGO_INITDB_DATABASE=${MONGO_DATABASE}'
+      - 'MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}'
+      - 'MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}'
     ports:
       - '27017:27017'
     volumes:
