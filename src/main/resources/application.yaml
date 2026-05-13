@@ -4,8 +4,12 @@ spring:
 
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://root:secret@localhost:27017/wtc_messenger?authSource=admin}
-      database: ${MONGODB_DATABASE:wtc_messenger}
+      host: localhost
+      port: 27017
+      database: ${MONGO_DATABASE}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      authentication-database: admin
       auto-index-creation: true
 
   kafka:
@@ -54,7 +58,7 @@ firebase:
   project-id: ${FIREBASE_PROJECT_ID:wtc-messenger-firebase}
 
 jwt:
-  secret: ${JWT_SECRET:wtc-secret-key-change-in-production}
+  secret: ${JWT_SECRET}
 
 management:
   endpoints:
