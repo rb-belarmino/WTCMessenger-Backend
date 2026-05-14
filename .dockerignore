@@ -1,0 +1,25 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+*.iml
+*.iws
+*.ipr
+
+# Maven
+target/
+
+# Secrets - nunca entrar na imagem
+.env
+src/main/resources/firebase-service-account.json
+
+# Dev files
+*.md
+HELP.md
+docker-compose*.yaml
+compose.yaml
+*.sh
+TestMongo.java

@@ -4,18 +4,12 @@ spring:
 
   docker:
     compose:
-      skip:
-        in-tests: false
       lifecycle-management: none
 
   data:
     mongodb:
       auto-index-creation: true
 
-mongodb:
-  uri: ${MONGODB_URI}
-
-spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
@@ -47,6 +41,9 @@ spring:
 
 server:
   port: 8082
+
+mongodb:
+  uri: ${MONGODB_URI}
 
 kafka:
   topics:
