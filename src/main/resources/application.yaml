@@ -2,15 +2,18 @@ spring:
   application:
     name: wtcmessenger
 
+  docker:
+    compose:
+      skip:
+        in-tests: false
+      lifecycle-management: none
+
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: ${MONGO_DATABASE}
-      username: ${MONGO_USERNAME}
-      password: ${MONGO_PASSWORD}
-      authentication-database: admin
       auto-index-creation: true
+
+mongodb:
+  uri: ${MONGODB_URI}
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}

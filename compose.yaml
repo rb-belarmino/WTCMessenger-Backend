@@ -2,10 +2,12 @@ services:
   mongodb:
     image: 'mongo:latest'
     container_name: wtcmessenger-mongo
+    labels:
+      - 'org.springframework.boot.service-connection=none'
     environment:
-      - 'MONGO_INITDB_DATABASE=${MONGO_DATABASE}'
-      - 'MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}'
-      - 'MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}'
+      - 'MONGO_INITDB_DATABASE=${MONGO_DATABASE:-wtc_messenger}'
+      - 'MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD:-secret}'
+      - 'MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME:-root}'
     ports:
       - '27017:27017'
     volumes:
