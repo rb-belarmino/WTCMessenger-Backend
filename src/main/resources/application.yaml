@@ -15,6 +15,7 @@ spring:
 mongodb:
   uri: ${MONGODB_URI}
 
+spring:
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
 
