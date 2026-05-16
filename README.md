@@ -29,8 +29,8 @@ O projeto precisa de um arquivo `.env` para carregar as credenciais sensíveis (
 
 Na raiz do projeto, crie um arquivo chamado `.env` e adicione o seguinte conteúdo:
 ```env
-JWT_SECRET=d3RjLXNlY3JldC1rZXktY2hhbmdlLWluLXByb2R1Y3Rpb24tMTIzNDU2Nzg=
-MONGODB_URI=mongodb+srv://[usuario]:[senha]@[seu-cluster].mongodb.net/wtc_messenger?appName=Cluster0
+JWT_SECRET=seu_secret_base64_aqui
+MONGODB_URI=sua_uri_do_mongodb_atlas_aqui
 ```
 > **Nota:** Peça a URI correta do MongoDB Atlas para o administrador do projeto, caso não a tenha.
 
