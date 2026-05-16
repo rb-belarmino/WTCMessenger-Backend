@@ -47,7 +47,9 @@ public class SecurityConfig {
                                 "/auth/refresh",
                                 "/h2-console/**",
                                 "/v3/api-docs/**",
-                                "/swagger-ui/**"
+                                "/v3/api-docs",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers("/segments/**")
                         .hasRole("OPERATOR")
