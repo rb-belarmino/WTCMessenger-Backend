@@ -32,8 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Environment Variables ###
+### Secrets / Environment ###
 .env
 firebase-service-account.json
-
-WTC_Messenger_Collection.json
