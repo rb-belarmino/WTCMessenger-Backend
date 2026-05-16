@@ -32,8 +32,8 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=default
-      - MONGODB_URI=mongodb+srv://ygorcar:1234567890@cluster0.bbanf48.mongodb.net/wtc_messenger?appName=Cluster0
-      - JWT_SECRET=wtc-secret-key-change-in-production
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
 
   messaging-service:
     build:
@@ -45,5 +45,5 @@ services:
       - kafka
     environment:
       - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
-      - MONGO_URI=mongodb+srv://ygorcar:1234567890@cluster0.bbanf48.mongodb.net/wtc_messenger?appName=Cluster0
-      - JWT_SECRET=wtc-secret-key-change-in-production
+      - MONGO_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}

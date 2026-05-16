@@ -1,3 +1,13 @@
+# ==============================================================================
+# AMBIENTE DE TESTE ISOLADO PARA O MESSAGING-SERVICE
+# ==============================================================================
+# IMPORTANTE: Este compose.yaml serve apenas para testes locais isolados deste 
+# microserviço, provisionando um MongoDB local, Kafka e Zookeeper do zero.
+#
+# Para subir o ecossistema COMPLETO da aplicação (Auth + Messaging) conectado ao
+# MongoDB Atlas (produção/nuvem via .env), utilize o compose.yaml que fica na raiz 
+# principal do projeto.
+# ==============================================================================
 services:
   mongodb:
     image: 'mongo:latest'
