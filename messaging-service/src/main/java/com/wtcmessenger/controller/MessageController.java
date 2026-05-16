@@ -1,35 +1,36 @@
 package com.wtcmessenger.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
+import com.wtcmessenger.dto.MessengerDTO;
+import com.wtcmessenger.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import java.util.UUID;
-import java.util.Map;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/messages")
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-    // For MongoDB save you would inject a MessageRepository here.
+    private final MessageService messageService;
 
     @PostMapping
     @PreAuthorize("hasRole('OPERATOR')")
-    public ResponseEntity<?> sendMessage(@RequestBody Map<String, Object> payload) {
-        // Create pending intent in Mongo
-        // Publish to Kafka
-        payload.put("id", UUID.randomUUID().toString());
-        payload.put("status", "PENDING");
-        
-        kafkaTemplate.send("wtc.message.send", payload);
-        
-        return ResponseEntity.ok(Map.of(
-            "success", true,
-            "message", "Mensagem enviada com sucesso para processamento.",
-            "data", payload
-        ));
+    public ResponseEntity<MessengerDTO.ApiResponse<MessengerDTO.MessageResponse>> sendMessage(
+            @RequestBody MessengerDTO.SendMessageRequest request,
+            @RequestHeader(value = "X-FCM-Token", required = false) String fcmToken,
+            Authentication authentication) {
+
+        String senderId = authentication != null ? authentication.getName() : "system";
+        MessengerDTO.MessageResponse response = messageService.sendMessage(senderId, request, fcmToken);
+
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(response, "Mensagem enviada com sucesso para processamento."));
+    }
+    
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('OPERATOR')")
+    public ResponseEntity<MessengerDTO.ApiResponse<MessengerDTO.MessageResponse>> getMessageById(@PathVariable String id) {
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(messageService.findById(id), "Mensagem encontrada."));
     }
 }
