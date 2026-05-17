@@ -69,6 +69,17 @@ Este é o coração das mensagens e envio de notificações. Como esse serviço 
 2. O Swagger exibirá os campos necessários da requisição. Caso precise testar manualmente via headers (se a opção Global Authorize não estiver visível), certifique-se de adicionar um Header HTTP padrão chamado `Authorization` com o valor `Bearer SEU_TOKEN_COPIADO`.
 3. Dispare os testes de criação de campanhas, busca de histórico ou disparo de Push Notifications.
 
+### Passo 3: Teste Automatizado End-to-End (E2E)
+
+Para facilitar a validação de toda a arquitetura de ponta a ponta, o projeto conta com um script de teste na raiz. Após subir os contêineres, abra um novo terminal e execute:
+
+```bash
+./test-e2e.sh
+```
+> **Nota:** Caso haja erro de permissão, execute `chmod +x test-e2e.sh` antes.
+
+O script fará o login automático no `auth-service`, extrairá o token JWT, e disparará uma requisição real de envio de mensagem no `messaging-service`, validando que os microsserviços, o MongoDB e o Kafka estão se comunicando corretamente.
+
 ---
 
 ## 📝 Avisos Importantes
