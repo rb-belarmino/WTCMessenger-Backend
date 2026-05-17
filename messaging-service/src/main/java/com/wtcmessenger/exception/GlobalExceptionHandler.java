@@ -18,6 +18,11 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.FORBIDDEN, "FORBIDDEN", "Acesso negado. Você não tem permissão para realizar esta ação.", req.getRequestURI());
     }
 
+    @ExceptionHandler(InvalidCampaignException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCampaign(InvalidCampaignException ex, HttpServletRequest req) {
+        return buildError(HttpStatus.BAD_REQUEST, "INVALID_CAMPAIGN", ex.getMessage(), req.getRequestURI());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex, HttpServletRequest req) {
         log.error("Unexpected error", ex);

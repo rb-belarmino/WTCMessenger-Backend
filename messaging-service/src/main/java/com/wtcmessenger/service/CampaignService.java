@@ -1,6 +1,7 @@
 package com.wtcmessenger.service;
 
 import com.wtcmessenger.dto.MessengerDTO;
+import com.wtcmessenger.exception.InvalidCampaignException;
 import com.wtcmessenger.exception.MessageNotFoundException;
 import com.wtcmessenger.model.Campaign;
 import com.wtcmessenger.model.Message;
@@ -29,6 +30,9 @@ public class CampaignService {
     private String campaignDispatchTopic;
 
     public MessengerDTO.CampaignResponse create(Campaign campaign) {
+        if (campaign.getActions() == null || campaign.getActions().isEmpty()) {
+            throw new InvalidCampaignException("A campanha deve conter pelo menos uma ação de engajamento com botões para o app SwiftUI.");
+        }
         campaign.setStatus(Campaign.CampaignStatus.DRAFT);
         campaign.setDeliveredCount(0);
         campaign.setReadCount(0);

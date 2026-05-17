@@ -27,6 +27,12 @@ public class Campaign {
 
     private String deepLink;
 
+    private String url;
+
+    private List<String> actions;
+
+    private java.util.Map<String, String> actionUrls;
+
     @Indexed
     private String segmentId;
 
