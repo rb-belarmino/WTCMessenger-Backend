@@ -48,37 +48,68 @@ docker compose logs -f
 
 ---
 
-## 🧪 Como Testar a Aplicação
+## 🧪 Estratégia e Execução de Testes (TDD & Cobertura)
 
-O projeto conta com o **Swagger UI** implementado em todos os serviços. O Swagger oferece uma interface gráfica super amigável para você visualizar e testar todos os endpoints sem precisar configurar o Postman.
+O projeto segue padrões de excelência de engenharia através de **TDD (Test-Driven Development)**, contando com testes unitários, testes de integração simulados e testes de fluxo End-to-End (E2E).
 
-### Passo 1: Acesse o Swagger do Auth Service
-Acesse no seu navegador: **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)**
+Temos três maneiras de rodar e validar a saúde do sistema:
 
-Neste portal, você poderá gerenciar as rotas de autenticação.
-1. Localize a rota `POST /auth/login`.
-2. Clique no botão **"Try it out"**.
-3. Insira as suas credenciais no formato JSON e clique em **"Execute"**.
-4. Você receberá um `accessToken` na resposta. **Copie esse token**, pois ele será usado para acessar o próximo microsserviço.
+### 1. Testes Unitários via Docker (Recomendado - Isolamento Total)
+Para rodar os testes sem a necessidade de ter o Java ou o Maven instalados fisicamente na sua máquina, você pode usar os próprios contêineres do Docker. Isso evita problemas de compatibilidade de versões do JDK local.
 
-### Passo 2: Acesse o Swagger do Messaging Service
-Acesse no seu navegador: **[http://localhost:8082/swagger-ui.html](http://localhost:8082/swagger-ui.html)**
+* **Rodar testes do Auth Service:**
+  ```bash
+  docker compose run --rm auth-service mvn test
+  ```
 
-Este é o coração das mensagens e envio de notificações. Como esse serviço exige segurança, você precisará usar o token gerado anteriormente.
-1. Nos endpoints listados no Swagger (ex: `GET /customers/{id}/timeline`), clique em **"Try it out"**.
-2. O Swagger exibirá os campos necessários da requisição. Caso precise testar manualmente via headers (se a opção Global Authorize não estiver visível), certifique-se de adicionar um Header HTTP padrão chamado `Authorization` com o valor `Bearer SEU_TOKEN_COPIADO`.
-3. Dispare os testes de criação de campanhas, busca de histórico ou disparo de Push Notifications.
+* **Rodar testes do Messaging Service:**
+  ```bash
+  docker compose run --rm messaging-service mvn test
+  ```
 
-### Passo 3: Teste Automatizado End-to-End (E2E)
+### 2. Testes Unitários via Script / Maven Local (Rápido para Desenvolvimento)
+Se você possui o JDK 21 configurado no seu terminal, você pode rodar os testes de forma rápida e direta.
 
-Para facilitar a validação de toda a arquitetura de ponta a ponta, o projeto conta com um script de teste na raiz. Após subir os contêineres, abra um novo terminal e execute:
+* **No Auth Service:**
+  ```bash
+  cd auth-service
+  ../mvnw clean test
+  ```
 
-```bash
-./test-e2e.sh
-```
-> **Nota:** Caso haja erro de permissão, execute `chmod +x test-e2e.sh` antes.
+* **No Messaging Service:**
+  ```bash
+  cd messaging-service
+  ./mvnw clean test
+  ```
 
-O script fará o login automático no `auth-service`, extrairá o token JWT, e disparará uma requisição real de envio de mensagem no `messaging-service`, validando que os microsserviços, o MongoDB e o Kafka estão se comunicando corretamente.
+### 3. Teste Automatizado End-to-End (E2E)
+Para validar se a orquestração entre os contêineres está funcionando 100% (Auth Service gerando JWT -> passando segurança do Gateway -> Messaging Service jogando no Kafka -> Consumidor gravando no Mongo e entregando via Firebase):
+
+1. Certifique-se de que os contêineres estão rodando (`docker compose up -d`).
+2. Na raiz do projeto, execute o script E2E:
+   ```bash
+   ./test-e2e.sh
+   ```
+   *(Caso ocorra erro de permissão, execute `chmod +x test-e2e.sh` antes).*
+
+---
+
+## 🏗️ Governança de Testes no Pipeline / Containers
+
+### Processo nos Containers (Multi-stage Build)
+Atualmente, as imagens Docker localizadas nos `Dockerfile`s utilizam a flag `-DskipTests` no comando `mvn package` para permitir que o desenvolvedor suba o ambiente de desenvolvimento local de forma ultra rápida. 
+
+No entanto, para **governança de ambiente de Produção/CI-CD**, a melhor prática da arquitetura é remover a flag `-DskipTests` no build corporativo. Isso garante que:
+1. Nenhuma imagem Docker seja construída se houver um teste unitário falhando.
+2. A integridade do ambiente produtivo permaneça inalterada.
+
+### Cobertura de Testes Atual
+* **`AuthServiceTest`**: Valida geração de JWT, refresh tokens stateless e segurança contra credenciais inválidas.
+* **`CampaignServiceTest`**: Valida a validação de regras de negócio de engajamento antes de persistir uma campanha e disparar para o Kafka.
+* **`MessageServiceTest`**: Valida validações 1:1, status de mensagens e conciliação de eventos de envio.
+* **`CampaignWorkerTest`**: Valida o processamento do consumidor assíncrono Kafka, integração de eventos simulados com Firebase e commit resiliente de offsets.
+
+---
 
 ---
 
