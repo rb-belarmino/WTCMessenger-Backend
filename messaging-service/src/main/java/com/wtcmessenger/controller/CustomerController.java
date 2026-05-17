@@ -1,49 +1,40 @@
 package com.wtcmessenger.controller;
 
+import com.wtcmessenger.dto.MessengerDTO;
+import com.wtcmessenger.model.Customer;
+import com.wtcmessenger.service.CustomerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.ResponseEntity;
-import java.util.Map;
+
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/customers")
+@RequiredArgsConstructor
 public class CustomerController {
+
+    private final CustomerService customerService;
 
     @GetMapping
     @PreAuthorize("hasRole('OPERATOR')")
-    public ResponseEntity<?> getAllCustomers() {
-        return ResponseEntity.ok(Map.of(
-            "success", true,
-            "data", List.of()
-        ));
+    public ResponseEntity<MessengerDTO.ApiResponse<List<Customer>>> getAllCustomers() {
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(customerService.findAll(), "Clientes listados com sucesso."));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('OPERATOR')")
-    public ResponseEntity<?> createCustomer(@RequestBody Map<String, Object> payload) {
-        payload.put("id", UUID.randomUUID().toString());
-        return ResponseEntity.status(201).body(Map.of(
-            "success", true,
-            "message", "Cliente criado com sucesso.",
-            "data", payload
-        ));
+    public ResponseEntity<MessengerDTO.ApiResponse<Customer>> createCustomer(@RequestBody Customer customer) {
+        Customer savedCustomer = customerService.create(customer);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(MessengerDTO.ApiResponse.success(savedCustomer, "Cliente criado com sucesso."));
     }
 
-    @GetMapping("/{id}/timeline")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('OPERATOR')")
-    public ResponseEntity<?> getCustomerTimeline(@PathVariable String id) {
-        // Return 360 unified profile
-        return ResponseEntity.ok(Map.of(
-            "success", true,
-            "data", Map.of(
-                "customerId", id,
-                "basicInfo", Map.of("name", "John Doe", "email", "john@wtcmessenger.com"),
-                "recentMessages", List.of(),
-                "campaignsReceived", List.of(),
-                "openTasks", List.of()
-            )
-        ));
+    public ResponseEntity<MessengerDTO.ApiResponse<Customer>> getCustomerById(@PathVariable String id) {
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(customerService.findById(id), "Cliente encontrado."));
     }
 }
