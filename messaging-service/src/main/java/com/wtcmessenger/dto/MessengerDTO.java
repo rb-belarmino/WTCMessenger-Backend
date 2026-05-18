@@ -114,6 +114,14 @@ public class MessengerDTO {
     }
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class CustomerTimelineResponse {
+        private com.wtcmessenger.model.Customer customer;
+        private List<MessengerDTO.MessageResponse> recentMessages;
+        private List<MessengerDTO.CampaignResponse> activeCampaigns;
+        private List<String> openTasks;
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ApiResponse<T> {
         private boolean success;
         private String message;
@@ -133,3 +141,4 @@ public class MessengerDTO {
         }
     }
 }
+

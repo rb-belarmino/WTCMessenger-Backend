@@ -37,4 +37,11 @@ public class CustomerController {
     public ResponseEntity<MessengerDTO.ApiResponse<Customer>> getCustomerById(@PathVariable String id) {
         return ResponseEntity.ok(MessengerDTO.ApiResponse.success(customerService.findById(id), "Cliente encontrado."));
     }
+
+    @GetMapping("/{id}/timeline")
+    @PreAuthorize("hasRole('OPERATOR')")
+    public ResponseEntity<MessengerDTO.ApiResponse<MessengerDTO.CustomerTimelineResponse>> getCustomerTimeline(@PathVariable String id) {
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(customerService.getTimeline(id), "Timeline do cliente carregada com sucesso."));
+    }
 }
+
