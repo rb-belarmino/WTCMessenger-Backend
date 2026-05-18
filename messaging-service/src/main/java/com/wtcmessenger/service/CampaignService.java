@@ -95,6 +95,49 @@ public class CampaignService {
         return toResponse(campaign);
     }
 
+    public MessengerDTO.CampaignResponse runABTest(String campaignId,
+                                                  MessengerDTO.ABTestCampaignRequest request,
+                                                  String operatorId) {
+        Campaign campaign = findOrThrow(campaignId);
+
+        if (campaign.getStatus() != Campaign.CampaignStatus.DRAFT) {
+            throw new IllegalStateException(
+                    "Apenas campanhas em DRAFT podem ser testadas via A/B. Status atual: " + campaign.getStatus());
+        }
+
+        List<String> recipients = campaign.getRecipientIds();
+        if (recipients == null || recipients.isEmpty()) {
+            throw new IllegalArgumentException("A campanha não possui destinatários configurados.");
+        }
+
+        log.info("Iniciando A/B Test para a campanha {}: Variante A='{}', Variante B='{}', Split={}%. Total destinatários={}", 
+            campaignId, request.getVariantATitle(), request.getVariantBTitle(), request.getSplitPercentage(), recipients.size());
+
+        int limitA = (int) Math.ceil(recipients.size() * (request.getSplitPercentage() / 100.0));
+        
+        for (int i = 0; i < recipients.size(); i++) {
+            String recipientId = recipients.get(i);
+            String variantTitle = (i < limitA) ? request.getVariantATitle() : request.getVariantBTitle();
+            
+            MessengerDTO.CampaignDispatchEvent event = MessengerDTO.CampaignDispatchEvent.builder()
+                    .campaignId(campaign.getId())
+                    .recipientId(recipientId)
+                    .content("[" + variantTitle + "] " + campaign.getContent())
+                    .deepLink(campaign.getDeepLink())
+                    .scheduledAt(LocalDateTime.now())
+                    .build();
+
+            kafkaTemplate.send(campaignDispatchTopic, recipientId, event);
+        }
+
+        campaign.setStatus(Campaign.CampaignStatus.COMPLETED);
+        campaign.setDispatchedAt(LocalDateTime.now());
+        campaign.setTotalRecipients(recipients.size());
+        campaign = campaignRepository.save(campaign);
+
+        return toResponse(campaign);
+    }
+
     @Scheduled(fixedDelay = 60_000)
     public void dispatchScheduledCampaigns() {
         List<Campaign> ready = campaignRepository.findByStatusAndScheduledAtBefore(

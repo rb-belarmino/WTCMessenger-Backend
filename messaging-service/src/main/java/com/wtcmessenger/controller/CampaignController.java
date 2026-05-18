@@ -55,6 +55,19 @@ public class CampaignController {
         return ResponseEntity.ok(MessengerDTO.ApiResponse.success(response, "Campanha agendada com sucesso."));
     }
 
+    @PostMapping("/{id}/abtest")
+    @PreAuthorize("hasRole('OPERATOR')")
+    public ResponseEntity<MessengerDTO.ApiResponse<MessengerDTO.CampaignResponse>> runABTest(
+            @PathVariable String id,
+            @RequestBody MessengerDTO.ABTestCampaignRequest request,
+            Authentication authentication) {
+        
+        String operatorId = authentication != null ? authentication.getName() : "system";
+        MessengerDTO.CampaignResponse response = campaignService.runABTest(id, request, operatorId);
+        
+        return ResponseEntity.ok(MessengerDTO.ApiResponse.success(response, "A/B Test de campanha disparado com sucesso."));
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('OPERATOR')")
     public ResponseEntity<MessengerDTO.ApiResponse<List<MessengerDTO.CampaignResponse>>> getAllCampaigns() {

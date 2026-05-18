@@ -35,6 +35,18 @@ public class MessengerDTO {
     }
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+    public static class ABTestCampaignRequest {
+        @NotBlank(message = "O título da variante A é obrigatório")
+        private String variantATitle;
+
+        @NotBlank(message = "O título da variante B é obrigatório")
+        private String variantBTitle;
+
+        @NotNull(message = "A porcentagem de split é obrigatória")
+        private Integer splitPercentage;
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
     public static class UpdateStatusRequest {
 
         @NotNull(message = "O status é obrigatório")
