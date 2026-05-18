@@ -43,11 +43,27 @@ public class CampaignService {
     public CampaignResponse generateCampaignPayload(String briefing) {
         log.info("Gerando campanha com IA para o briefing: {}", briefing);
         
-        return chatClient.prompt()
-                .system("Você é um especialista em Marketing do World Trade Center (WTC). Crie uma campanha persuasiva e corporativa baseada no briefing do usuário. Retorne ESTRITAMENTE o objeto JSON solicitado, contendo título chamativo, corpo do texto e ao menos dois botões de ação interativos com deep links fictícios do WTC.")
+        CampaignResponse response = chatClient.prompt()
+                .system("Você é um especialista em Marketing do World Trade Center (WTC). Crie uma campanha persuasiva e corporativa baseada no briefing do usuário. Retorne ESTRITAMENTE o objeto JSON solicitado, contendo título chamativo, corpo do texto e ao menos dois botões de ação interativos com deep links fictícios do WTC. Preencha o campo 'url' com uma URL de imagem placeholder válida (ex: https://via.placeholder.com/600x300) se nenhuma outra for aplicável.")
                 .user(briefing)
                 .call()
                 .entity(CampaignResponse.class);
+
+        if (response == null) {
+            throw new InvalidCampaignException("A IA falhou em gerar o payload estruturado.");
+        }
+
+        if (response.url() == null || response.url().trim().isEmpty()) {
+            response = new CampaignResponse(
+                response.title(),
+                response.body(),
+                "https://via.placeholder.com/600x300",
+                response.actions(),
+                response.actionUrls()
+            );
+        }
+        
+        return response;
     }
 
     public MessengerDTO.CampaignResponse create(Campaign campaign) {
@@ -171,6 +187,9 @@ public class CampaignService {
                 .title(c.getTitle())
                 .content(c.getContent())
                 .deepLink(c.getDeepLink())
+                .url(c.getUrl())
+                .actions(c.getActions())
+                .actionUrls(c.getActionUrls())
                 .segmentId(c.getSegmentId())
                 .status(c.getStatus().name())
                 .scheduledAt(c.getScheduledAt())

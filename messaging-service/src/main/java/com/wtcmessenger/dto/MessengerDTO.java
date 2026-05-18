@@ -99,6 +99,9 @@ public class MessengerDTO {
         private String title;
         private String content;
         private String deepLink;
+        private String url;
+        private List<String> actions;
+        private java.util.Map<String, String> actionUrls;
         private String segmentId;
         private String status;
         private LocalDateTime scheduledAt;
