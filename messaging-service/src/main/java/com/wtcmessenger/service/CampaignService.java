@@ -1,5 +1,6 @@
 package com.wtcmessenger.service;
 
+import com.wtcmessenger.dto.CampaignResponse;
 import com.wtcmessenger.dto.MessengerDTO;
 import com.wtcmessenger.exception.InvalidCampaignException;
 import com.wtcmessenger.exception.MessageNotFoundException;
@@ -7,8 +8,8 @@ import com.wtcmessenger.model.Campaign;
 import com.wtcmessenger.model.Message;
 import com.wtcmessenger.repository.CampaignRepository;
 import com.wtcmessenger.repository.MessageRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,15 +20,35 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CampaignService {
 
     private final CampaignRepository campaignRepository;
     private final MessageRepository messageRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final ChatClient chatClient;
 
     @Value("${kafka.topics.campaign-dispatch}")
     private String campaignDispatchTopic;
+
+    public CampaignService(CampaignRepository campaignRepository,
+                           MessageRepository messageRepository,
+                           KafkaTemplate<String, Object> kafkaTemplate,
+                           ChatClient.Builder chatClientBuilder) {
+        this.campaignRepository = campaignRepository;
+        this.messageRepository = messageRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.chatClient = chatClientBuilder.build();
+    }
+
+    public CampaignResponse generateCampaignPayload(String briefing) {
+        log.info("Gerando campanha com IA para o briefing: {}", briefing);
+        
+        return chatClient.prompt()
+                .system("Você é um especialista em Marketing do World Trade Center (WTC). Crie uma campanha persuasiva e corporativa baseada no briefing do usuário. Retorne ESTRITAMENTE o objeto JSON solicitado, contendo título chamativo, corpo do texto e ao menos dois botões de ação interativos com deep links fictícios do WTC.")
+                .user(briefing)
+                .call()
+                .entity(CampaignResponse.class);
+    }
 
     public MessengerDTO.CampaignResponse create(Campaign campaign) {
         if (campaign.getActions() == null || campaign.getActions().isEmpty()) {

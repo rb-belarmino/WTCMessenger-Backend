@@ -1,5 +1,7 @@
 package com.wtcmessenger.controller;
 
+import com.wtcmessenger.dto.CampaignPromptRequest;
+import com.wtcmessenger.dto.CampaignResponse;
 import com.wtcmessenger.dto.MessengerDTO;
 import com.wtcmessenger.model.Campaign;
 import com.wtcmessenger.service.CampaignService;
@@ -18,6 +20,17 @@ import java.util.List;
 public class CampaignController {
 
     private final CampaignService campaignService;
+
+    @PostMapping("/generate")
+    @PreAuthorize("hasRole('OPERATOR')")
+    public ResponseEntity<MessengerDTO.ApiResponse<CampaignResponse>> generateCampaign(
+            @RequestBody CampaignPromptRequest request) {
+        
+        CampaignResponse response = campaignService.generateCampaignPayload(request.prompt());
+        return ResponseEntity.ok(
+                MessengerDTO.ApiResponse.success(response, "Campanha gerada com sucesso pela IA do WTC.")
+        );
+    }
 
     @PostMapping
     @PreAuthorize("hasRole('OPERATOR')")
