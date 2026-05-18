@@ -13,6 +13,8 @@ public interface MessageRepository extends MongoRepository<Message, String> {
 
     Page<Message> findByRecipientIdOrderByCreatedAtDesc(String recipientId, Pageable pageable);
 
+    Page<Message> findBySenderIdOrRecipientIdOrderByCreatedAtDesc(String senderId, String recipientId, Pageable pageable);
+
     List<Message> findBySenderIdAndRecipientIdOrderByCreatedAtAsc(String senderId, String recipientId);
 
     long countByRecipientIdAndStatus(String recipientId, Message.MessageStatus status);

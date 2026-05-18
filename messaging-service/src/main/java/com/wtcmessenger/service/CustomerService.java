@@ -40,7 +40,7 @@ public class CustomerService {
         Customer customer = findById(id);
         
         List<MessengerDTO.MessageResponse> recentMessages = messageRepository
-                .findByRecipientIdOrderByCreatedAtDesc(id, PageRequest.of(0, 50))
+                .findBySenderIdOrRecipientIdOrderByCreatedAtDesc(id, id, PageRequest.of(0, 50))
                 .getContent()
                 .stream()
                 .map(this::toMessageResponse)
