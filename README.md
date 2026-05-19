@@ -72,6 +72,13 @@ GEMINI_API_KEY=sua_chave_de_api_do_gemini_aqui
 ```
 
 > ⚠️ **Importante**: O Copiloto de IA (`/campaigns/generate`) requer uma `GEMINI_API_KEY` válida para que o Spring AI consiga se comunicar com os modelos generativos da Google.
+> 
+> **💡 Como obter a sua chave de API do Gemini:**
+> 1. Acesse o portal oficial para desenvolvedores: **[Google AI Studio](https://aistudio.google.com/)**.
+> 2. Faça login com a sua conta Google.
+> 3. No menu lateral ou painel central, clique em **"Get API Key"** (Obter Chave de API).
+> 4. Clique em **"Create API Key"** (Criar Chave de API) e confirme a criação.
+> 5. Copie a chave gerada (geralmente começa com `AIzaSy...`) e cole-a no seu arquivo `.env` local no campo `GEMINI_API_KEY`.
 
 ### 2. Iniciar os Serviços no Docker
 Na raiz do backend, execute o comando de orquestração:
@@ -92,7 +99,7 @@ Com toda a infraestrutura do backend (microsserviços, Kafka, MongoDB) rodando e
 
 Siga o passo a passo para configurar e rodar o app contido no **README do Frontend**:
 *   **Link Remoto (Repositório GitHub)**: [WTCMessenger SwiftUI Frontend](https://github.com/rb-belarmino/WTCMessenger)
-*   **Arquivo Local**: Consulte as diretrizes detalhadas de execução no arquivo [WTC App/WTCMessenger/README.md](../WTC%20App/WTCMessenger/README.md).
+*   **Arquivo Local**: consulte as diretrizes de execução no arquivo [WTC App/WTCMessenger/README.md](<../WTC App/WTCMessenger/README.md>) ou abra diretamente no seu Mac pelo link: [Link Direto Local (Mac)](file:///Users/rodrigobelarmino/Documents/DEV/FIAP/WTC%20App/WTCMessenger/README.md).
 
 ---
 
