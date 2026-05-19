@@ -37,7 +37,7 @@ graph TD
     *   **Autenticação JWT**: Emite e valida Tokens JWT (Access e Refresh) de forma totalmente stateless.
     *   **Controle de Acessos**: Separação de escopo baseada em perfis (`ROLE_OPERATOR` e `ROLE_CUSTOMER`).
     *   **Criptografia**: Senhas salvas com hash BCrypt seguro.
-    *   **Massa de Dados (`DataInitializer`)**: Popula automaticamente o MongoDB com dados padrão de testes (`operador@wtc.com` / `admin123` e `cliente@wtc.com` / `cliente123`) na primeira execução.
+    *   **Massa de Dados (`DataInitializer`)**: Popula automaticamente o MongoDB com dados padrão de testes (`operator@wtcmessenger.com` / `operator123` e `customer@wtcmessenger.com` / `customer123`) na primeira execução.
 2.  **Messaging Service** (Porta `8082`):
     *   **CRM & Clientes**: CRUD completo de clientes, criação de tags dinâmicas e geração da **Visão 360° unificada** (`GET /customers/{id}/timeline`).
     *   **Copiloto de IA (`Spring AI`)**: Gera campanhas promocionais estruturadas por Inteligência Artificial a partir de prompts em linguagem natural.
