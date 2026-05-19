@@ -1,6 +1,6 @@
 # WTC Messenger - Sistema de Mensageria, CRM e Orquestração 🚀
 
-O **WTC Messenger** é uma plataforma robusta de CRM e comunicação em tempo real baseada em uma arquitetura de microsserviços escrita em **Java 17 / Spring Boot**. Ela foi projetada para lidar com segmentação de clientes, orquestração assíncrona de mensagens, disparo de campanhas enriquecidas por Inteligência Artificial (Gemini) e notificações Push instantâneas.
+O **WTC Messenger** é uma plataforma robusta de CRM e comunicação em tempo real baseada em uma arquitetura de microsserviços escrita em **Java 21 / Spring Boot**. Ela foi projetada para lidar com segmentação de clientes, orquestração assíncrona de mensagens, disparo de campanhas enriquecidas por Inteligência Artificial (Gemini) e notificações Push instantâneas.
 
 A infraestrutura utiliza conteinerização via **Docker**, mensageria assíncrona com **Apache Kafka** e persistência NoSQL com **MongoDB**.
 
