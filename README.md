@@ -135,6 +135,23 @@ Siga o passo a passo para configurar e rodar o app contido no **README do Fronte
 
 ---
 
+### 🌐 4. Testando as APIs Interativamente pelo Swagger UI
+Ambos os microsserviços possuem o **Springdoc OpenAPI (Swagger)** totalmente configurado e funcional. Você pode explorar, documentar e testar todas as rotas de API diretamente no seu navegador com os contêineres ativos:
+
+*   🔐 **Swagger UI do Auth-Service (Porta 8080)**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+    *Utilize para realizar requisições ao endpoint `/auth/login` e receber tokens JWT válidos.*
+*   💬 **Swagger UI do Messaging-Service (Porta 8082)**: [http://localhost:8082/swagger-ui/index.html](http://localhost:8082/swagger-ui/index.html)
+    *Utilize para simular cadastros de clientes, timelines 360°, testes A/B de marketing e interações com a IA do Gemini.*
+
+> 💡 **Dica de Teste com Autenticação JWT**:
+> 1. No Swagger do **Auth-Service**, expanda a rota `POST /auth/login`, clique em *Try it out* e submeta o JSON de login padrão (ex: `operator@wtcmessenger.com` / `operator123`).
+> 2. Copie o valor do `accessToken` que virá no corpo da resposta JSON.
+> 3. No Swagger do **Messaging-Service**, clique no botão azul **"Authorize"** localizado no canto superior direito.
+> 4. Cole o token no campo de texto seguindo o esquema Bearer: digite `Bearer ` seguido do token copiado (ex: `Bearer eyJhbGciOi...`) e salve.
+> 5. Todas as rotas autenticadas estão liberadas para teste interativo!
+
+---
+
 ## 🧪 Estratégia de Testes e Cobertura (TDD)
 
 O projeto segue boas práticas de engenharia de software com pirâmide de testes completa (Unitários, Integração e E2E).
