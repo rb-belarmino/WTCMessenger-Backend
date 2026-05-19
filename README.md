@@ -108,7 +108,6 @@ Com toda a infraestrutura do backend (microsserviços, Kafka, MongoDB) rodando e
 Siga o passo a passo para configurar e rodar o app contido no **README do Frontend**:
 
 - **Link Remoto (Repositório GitHub)**: [WTCMessenger SwiftUI Frontend](https://github.com/rb-belarmino/WTCMessenger)
-- **Arquivo Local**: consulte as diretrizes de execução no arquivo [WTC App/WTCMessenger/README.md](<../WTC App/WTCMessenger/README.md>)
 
 ---
 
