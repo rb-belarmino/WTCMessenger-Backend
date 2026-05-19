@@ -75,8 +75,32 @@ GEMINI_API_KEY=sua_chave_de_api_do_gemini_aqui
 
 > ⚠️ **Importante**: O Copiloto de IA (`/campaigns/generate`) requer uma `GEMINI_API_KEY` válida para que o Spring AI consiga se comunicar com os modelos generativos da Google.
 >
-> **💡 Como obter a sua chave de API do Gemini:**
+> ---
 >
+> ### 🔑 Guia Completo para Gerar as Chaves do Arquivo `.env`:
+>
+> #### 1. Como gerar a chave `JWT_SECRET` (Segurança JWT)
+> Para criptografar e assinar os tokens JWT de forma robusta e compatível com o algoritmo HMAC256, você precisa de uma chave forte. Você pode gerar uma string randômica em Base64 de 256 bits executando o seguinte comando no seu terminal (macOS/Linux):
+> ```bash
+> openssl rand -base64 32
+> ```
+> *Copie a saída gerada e cole-a na variável `JWT_SECRET`.*
+>
+> #### 2. Como obter a chave `MONGODB_URI` (Banco de Dados NoSQL)
+> Você pode conectar os microsserviços a um banco de dados hospedado em nuvem de forma gratuita ou rodar um MongoDB localmente:
+> *   **Opção em Nuvem com MongoDB Atlas (Recomendado)**:
+>     1. Crie uma conta gratuita no portal do **[MongoDB Atlas](https://www.mongodb.com/cloud/atlas)**.
+>     2. Crie um novo cluster compartilhado e gratuito (M0).
+>     3. Acesse **Database Access** no menu lateral e crie um usuário de banco de dados com privilégios de leitura e escrita.
+>     4. Acesse **Network Access** e adicione uma regra de IP liberando conexões de qualquer lugar (`0.0.0.0/0`) para simplificar a orquestração com contêineres Docker.
+>     5. Clique no painel central em **Connect** -> escolha **Drivers** (Driver Java) e copie a connection string fornecida.
+>     6. Insira a string na variável `MONGODB_URI` substituindo os placeholders `<username>` e `<password>` pelas suas credenciais reais. Exemplo:
+>        `mongodb+srv://meuUsuario:minhaSenha@wtccluster.mongodb.net/wtcmessenger?retryWrites=true&w=majority`
+> *   **Opção de Execução Local**:
+>     Se possuir um servidor MongoDB rodando fisicamente na sua máquina ou em um contêiner separado na porta 27017, utilize a connection string local:
+>     `mongodb://localhost:27017/wtcmessenger`
+>
+> #### 3. Como obter a chave `GEMINI_API_KEY` (Inteligência Artificial)
 > 1. Acesse o portal oficial para desenvolvedores: **[Google AI Studio](https://aistudio.google.com/)**.
 > 2. Faça login com a sua conta Google.
 > 3. No menu lateral ou painel central, clique em **"Get API Key"** (Obter Chave de API).
