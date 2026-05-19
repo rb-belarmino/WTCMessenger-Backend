@@ -87,6 +87,15 @@ docker compose logs -f
 
 ---
 
+### 3. 📱 Próximo Passo: Executar o Aplicativo Móvel (Frontend)
+Com toda a infraestrutura do backend (microsserviços, Kafka, MongoDB) rodando em segundo plano, você está pronto para inicializar e testar o aplicativo iOS reativo.
+
+Siga o passo a passo para configurar e rodar o app contido no **README do Frontend**:
+*   **Link Remoto (Repositório GitHub)**: [WTCMessenger SwiftUI Frontend](https://github.com/rb-belarmino/WTCMessenger)
+*   **Arquivo Local**: Consulte as diretrizes detalhadas de execução no arquivo [WTC App/WTCMessenger/README.md](../WTC%20App/WTCMessenger/README.md).
+
+---
+
 ## 🧪 Estratégia de Testes e Cobertura (TDD)
 
 O projeto segue boas práticas de engenharia de software com pirâmide de testes completa (Unitários, Integração e E2E).
